@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Search App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: url('https://source.unsplash.com/1600x900/?cinema,movie') no-repeat center center/cover;
+            color: white;
+            padding: 20px;
+        }
+        .container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+        }
+        input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: none;
+            text-align: center;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #ff4500;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #cc3700;
+        }
+        .movie-info {
+            margin-top: 20px;
+        }
+        img {
+            width: 100px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🎬 Movie Search App</h2>
+        <input type="text" id="movieInput" placeholder="Enter movie name">
+        <button onclick="getMovie()">Search</button>
+        <div class="movie-info" id="movieInfo"></div>
+    </div>
+
+    <script>
+        async function getMovie() {
+            let movieName = document.getElementById("movieInput").value.trim();
+            let apiKey = "a0164d43"; // Replace with your OMDB API key
+            let url = `https://www.omdbapi.com/?t=${movieName}&apikey=${apiKey}`;
+
+            try {
+                let response = await fetch(url);
+                let data = await response.json();
+                
+                if (data.Response === "True") {
+                    document.getElementById("movieInfo").innerHTML = `
+                        <h3>${data.Title} (${data.Year})</h3>
+                        <img src="${data.Poster}" alt="Movie Poster">
+                        <p>🎭 Genre: ${data.Genre}</p>
+                        <p>🎬 Director: ${data.Director}</p>
+                        <p>⭐ IMDb Rating: ${data.imdbRating}</p>
+                        <p>📜 Plot: ${data.Plot}</p>
+                    `;
+                } else {
+                    document.getElementById("movieInfo").innerHTML = `<p>❌ Movie not found! Check spelling.</p>`;
+                }
+            } catch (error) {
+                document.getElementById("movieInfo").innerHTML = `<p>⚠️ Error fetching data.</p>`;
+            }
+        }
+    </script>
+</body>
+</html>
